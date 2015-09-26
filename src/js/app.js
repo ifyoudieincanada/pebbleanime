@@ -17,6 +17,41 @@ var main = new UI.Card({
 main.show();
 
 main.on('click', 'up', function(e) {
+  var animeList = buildAnimeList();
+  animeList.show();
+
+  animeList.on('select', function(e) {
+    var epList = buildEpisodeList();
+    epList.show();
+  }
+}
+
+main.on('click', 'select', function(e) {
+  // THIS IS EXAMPLE CODE
+  var wind = new UI.Window({
+    fullscreen: true,
+  });
+  var textfield = new UI.Text({
+    position: new Vector2(0, 65),
+    size: new Vector2(144, 30),
+    font: 'gothic-24-bold',
+    text: 'Text Anywhere!',
+    textAlign: 'center'
+  });
+  wind.add(textfield);
+  wind.show();
+});
+
+main.on('click', 'down', function(e) {
+  // THIS IS EXAMPLE CODE
+  var card = new UI.Card();
+  card.title('A Card');
+  card.subtitle('Is a Window');
+  card.body('The simplest window type in Pebble.js.');
+  card.show();
+});
+
+function buildAnimeList() {
   var animeList = new UI.Menu({
     sections: [{
       items: [{
@@ -30,30 +65,35 @@ main.on('click', 'up', function(e) {
       }]
     }]
   });
-  animeList.on('select', function(e) {
-    episodeList = new UI.Menu({
-      sections: [{
-        items: [{
-          title: 'Episode #1',
-          icon: 'images/menu_icon.png',
-          subtitle: 'Brief description
-        }, {
-          title: 'Episode #2',
-          icon: 'images/menu_icon.png',
-          subtitle: 'Brief description
-        },{
-          title: 'Episode #3',
-          icon: 'images/menu_icon.png',
-          subtitle: 'Brief description
-        }, {
-          title: 'Episode #4',
-          icon: 'images/menu_icon.png',
-          subtitle: 'Brief description
-        }]
-      }]
-    });
-  }
+  return animeList;
 }
+
+function buildEpisodeList() {
+  episodeList = new UI.Menu({
+    sections: [{
+      items: [{
+        title: 'Episode #1',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description
+      }, {
+        title: 'Episode #2',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description
+      },{
+        title: 'Episode #3',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description
+      }, {
+        title: 'Episode #4',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description
+      }]
+    }]
+  });
+
+  return episodeList;
+}
+
 
 /*
  * main.on('click', 'up', function(e) {
