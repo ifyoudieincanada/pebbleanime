@@ -23,7 +23,7 @@ main.on('click', 'up', function(e) {
   animeList.on('select', function(e) {
     var epList = buildEpisodeList();
     epList.show();
-  }
+  });
 }
 
 function buildAnimeList() {
