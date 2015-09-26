@@ -7,6 +7,46 @@
 var UI = require('ui');
 var Vector2 = require('vector2');
 
+function buildAnimeList() {
+  return new UI.Menu({
+    sections: [{
+      items: [{
+        title: 'Anime #1',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      }, {
+        title: 'Anime #2',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      }]
+    }]
+  });
+}
+
+function buildEpisodeList() {
+  return new UI.Menu({
+    sections: [{
+      items: [{
+        title: 'Episode #1',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      }, {
+        title: 'Episode #2',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      },{
+        title: 'Episode #3',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      }, {
+        title: 'Episode #4',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
+      }]
+    }]
+  });
+}
+
 var main = new UI.Card({
   title: 'Pebble.js',
   icon: 'images/menu_icon.png',
@@ -24,50 +64,7 @@ main.on('click', 'up', function(e) {
     var epList = buildEpisodeList();
     epList.show();
   });
-}
-
-function buildAnimeList() {
-  var animeList = new UI.Menu({
-    sections: [{
-      items: [{
-        title: 'Anime #1',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }, {
-        title: 'Anime #2',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }]
-    }]
-  });
-  return animeList;
-}
-
-function buildEpisodeList() {
-  episodeList = new UI.Menu({
-    sections: [{
-      items: [{
-        title: 'Episode #1',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description
-      }, {
-        title: 'Episode #2',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description
-      },{
-        title: 'Episode #3',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description
-      }, {
-        title: 'Episode #4',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description
-      }]
-    }]
-  });
-
-  return episodeList;
-}
+});
 
 /*
  * main.on('click', 'up', function(e) {
