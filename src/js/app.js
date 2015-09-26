@@ -23,47 +23,36 @@ function buildAnimeList() {
   });
 }
 
-function buildEpisodeList() {
+function getEpisodes(index) {
+  return [];
+}
+
+function buildEpisodeList(index) {
+  var episodes = getEpisodes(index);
+  var formatted_episodes = [];
+
+  var i;
+  for (i = 0; i < episodes.length; i++) {
+    formatted_episodes[i] = {
+      title: 'placeholder #' + i,
+      icon: 'images/menu_icon.png',
+      subtitle: 'description #' + i
+    };
+  }
+
   return new UI.Menu({
     sections: [{
-      items: [{
-        title: 'Episode #1',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }, {
-        title: 'Episode #2',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      },{
-        title: 'Episode #3',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }, {
-        title: 'Episode #4',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }]
+      items: formatted_episodes
     }]
   });
 }
 
-var main = new UI.Card({
-  title: 'Pebble.js',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Hello World!',
-  body: 'Press any button.'
-});
-
+var main = buildAnimeList();
 main.show();
 
-main.on('click', 'up', function(e) {
-  var animeList = buildAnimeList();
-  animeList.show();
-
-  animeList.on('select', function(e) {
-    var epList = buildEpisodeList();
-    epList.show();
-  });
+main.on('select', function(e) {
+  var epList = buildEpisodeList(e.itemIndex);
+  epList.show();
 });
 
 /*
