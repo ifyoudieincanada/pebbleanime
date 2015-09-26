@@ -4,7 +4,6 @@
  * This is where you write your app.
  */
 
-/*
 var UI = require('ui');
 var Vector2 = require('vector2');
 
@@ -69,9 +68,6 @@ function buildEpisodeList() {
 
   return episodeList;
 }
-*/
-
-console.log('hello world');
 
 /*
  * main.on('click', 'up', function(e) {
