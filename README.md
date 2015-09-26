@@ -1,2 +1,2 @@
 # pebbleanime
-My Anime List interaction for Pebble
+MyAnimeList interaction for Pebble
