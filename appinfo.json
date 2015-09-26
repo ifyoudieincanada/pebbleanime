@@ -1,0 +1,24 @@
+{
+  "uuid": "placeholder",
+  "shortName": "Anime",
+  "companyName": "ifyoudieincanada",
+  "versionCode": 1,
+  "versionLabel": "1.0"
+  "sdkVersion": "3",
+  "targetPlatforms": ["basalt"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": [
+      {
+        "type": "raw",
+        "name": "ICON_TEMP",
+        "file": "Example_icon.pdc"
+      }
+    ]
+  }
+}
