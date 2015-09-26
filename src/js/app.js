@@ -33,6 +33,7 @@ function buildEpisodeList(index) {
 
   var i;
   for (i = 0; i < episodes.length; i++) {
+    console.log('iteration: ' + i);
     formatted_episodes[i] = {
       title: 'placeholder #' + i,
       icon: 'images/menu_icon.png',
@@ -51,6 +52,7 @@ var main = buildAnimeList();
 main.show();
 
 main.on('select', function(e) {
+  console.log('selected: ' + e.itemIndex);
   var epList = buildEpisodeList(e.itemIndex);
   epList.show();
 });
