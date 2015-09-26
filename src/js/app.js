@@ -1,52 +1,78 @@
-/**
- * Welcome to Pebble.js!
- *
- * This is where you write your app.
- */
+/* ------ REQUIRE LIBRARIES -------- */
 
 var UI = require('ui');
 var Vector2 = require('vector2');
+var ajax = require('ajax');
+
+/* ------ ANIME LIST CODE -------- */
+
+function formatAnimes(animeList) {
+  var formatted_animes = [];
+
+  var i;
+  for (i = 0; i < animeList.length; i++) {
+    console.log('iteration: ' + i);
+
+    formatted_animes[i] = {
+      title: 'placeholder #' + i,
+      icon: 'images/menu_icon.png',
+      subtitle: 'description #' + i
+    };
+  }
+  return formatted_animes;
+}
+
+function getAnimes() {
+  return [{
+    title: 'test 1',
+    icon: 'images/menu_icon.png',
+    subtitle: 'Brief description'
+  }, {
+    title: 'test 2',
+    icon: 'images/menu_icon.png',
+    subtitle: 'Another description'
+  }];
+}
 
 function buildAnimeList() {
   return new UI.Menu({
     sections: [{
-      items: [{
-        title: 'Anime #1',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }, {
-        title: 'Anime #2',
-        icon: 'images/menu_icon.png',
-        subtitle: 'Brief description'
-      }]
+      items: getAnimes()
     }]
   });
 }
 
-function getEpisodes(index) {
-  return [];
-}
+/* ------ EPISODE LIST CODE -------- */
 
-function buildEpisodeList(index) {
-  var episodes = getEpisodes(index);
+function formatEpisodes(episodeList) {
   var formatted_episodes = [];
 
   var i;
-  for (i = 0; i < episodes.length; i++) {
+  for (i = 0; i < episodeList.length; i++) {
     console.log('iteration: ' + i);
+
     formatted_episodes[i] = {
       title: 'placeholder #' + i,
       icon: 'images/menu_icon.png',
       subtitle: 'description #' + i
     };
   }
+  return formatted_episodes;
+}
 
+function getEpisodes(index) {
+  return formatEpisodes([]);
+}
+
+function buildEpisodeList(index) {
   return new UI.Menu({
     sections: [{
-      items: formatted_episodes
+      items: getEpisodes(index)
     }]
   });
 }
+
+/* ------ MAIN CODE -------- */
 
 var main = buildAnimeList();
 main.show();
@@ -56,6 +82,8 @@ main.on('select', function(e) {
   var epList = buildEpisodeList(e.itemIndex);
   epList.show();
 });
+
+/* ------ SAMPLE CODE -------- */
 
 /*
  * main.on('click', 'up', function(e) {
