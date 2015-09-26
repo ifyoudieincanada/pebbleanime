@@ -26,7 +26,13 @@ ajax(
 );
 
 function showList(jsArray) {
-  for (var i = 0; i < jsArray.length; i++) {
-    console.log(jsArray[i]);
-  }
+  var resultsMenu = new UI.Menu({
+    sections: [{
+      title: 'Episodes',
+      items: jsArray
+    }]
+  });
+
+  resultsMenu.show();
+  splashCard.hide();
 }
