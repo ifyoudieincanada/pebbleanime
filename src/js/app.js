@@ -17,44 +17,85 @@ var main = new UI.Card({
 main.show();
 
 main.on('click', 'up', function(e) {
-  var menu = new UI.Menu({
+  var animeList = new UI.Menu({
     sections: [{
       items: [{
-        title: 'Pebble.js',
+        title: 'Anime #1',
         icon: 'images/menu_icon.png',
-        subtitle: 'Can do Menus'
+        subtitle: 'Brief description'
       }, {
-        title: 'Second Item',
-        subtitle: 'Subtitle Text'
+        title: 'Anime #2',
+        icon: 'images/menu_icon.png',
+        subtitle: 'Brief description'
       }]
     }]
   });
-  menu.on('select', function(e) {
-    console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
-    console.log('The item is titled "' + e.item.title + '"');
-  });
-  menu.show();
-});
+  animeList.on('select', function(e) {
+    episodeList = new UI.Menu({
+      sections: [{
+        items: [{
+          title: 'Episode #1',
+          icon: 'images/menu_icon.png',
+          subtitle: 'Brief description
+        }, {
+          title: 'Episode #2',
+          icon: 'images/menu_icon.png',
+          subtitle: 'Brief description
+        },{
+          title: 'Episode #3',
+          icon: 'images/menu_icon.png',
+          subtitle: 'Brief description
+        }, {
+          title: 'Episode #4',
+          icon: 'images/menu_icon.png',
+          subtitle: 'Brief description
+        }]
+      }]
+    });
+  }
+}
 
-main.on('click', 'select', function(e) {
-  var wind = new UI.Window({
-    fullscreen: true,
-  });
-  var textfield = new UI.Text({
-    position: new Vector2(0, 65),
-    size: new Vector2(144, 30),
-    font: 'gothic-24-bold',
-    text: 'Text Anywhere!',
-    textAlign: 'center'
-  });
-  wind.add(textfield);
-  wind.show();
-});
-
-main.on('click', 'down', function(e) {
-  var card = new UI.Card();
-  card.title('A Card');
-  card.subtitle('Is a Window');
-  card.body('The simplest window type in Pebble.js.');
-  card.show();
-});
+/*
+ * main.on('click', 'up', function(e) {
+ *   var menu = new UI.Menu({
+ *     sections: [{
+ *       items: [{
+ *         title: 'Pebble.js',
+ *         icon: 'images/menu_icon.png',
+ *         subtitle: 'Can do Menus'
+ *       }, {
+ *         title: 'Second Item',
+ *         subtitle: 'Subtitle Text'
+ *       }]
+ *     }]
+ *   });
+ *   menu.on('select', function(e) {
+ *     console.log('Selected item #' + e.itemIndex + ' of section #' + e.sectionIndex);
+ *     console.log('The item is titled "' + e.item.title + '"');
+ *   });
+ *   menu.show();
+ * });
+ * 
+ * main.on('click', 'select', function(e) {
+ *   var wind = new UI.Window({
+ *     fullscreen: true,
+ *   });
+ *   var textfield = new UI.Text({
+ *     position: new Vector2(0, 65),
+ *     size: new Vector2(144, 30),
+ *     font: 'gothic-24-bold',
+ *     text: 'Text Anywhere!',
+ *     textAlign: 'center'
+ *   });
+ *   wind.add(textfield);
+ *   wind.show();
+ * });
+ * 
+ * main.on('click', 'down', function(e) {
+ *   var card = new UI.Card();
+ *   card.title('A Card');
+ *   card.subtitle('Is a Window');
+ *   card.body('The simplest window type in Pebble.js.');
+ *   card.show();
+ * });
+ */
