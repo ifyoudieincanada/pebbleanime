@@ -1,52 +1,3 @@
-var OPTIONS = 
-[{
-  title: '+',
-  icon: 'images/menu_icon.png',
-  subtitle: 'increments progress'
-} ,{
-  title: '-',
-  icon: 'images/menu_icon.png',
-  subtitle: 'decrements progress'
-} ,{
-  title: 'Progress',
-  icon: 'images/menu_icon.png',
-  subtitle: 'epsWatched/totEps'
-}, {
-  title: 'Rating',
-  icon: 'images/menu_icon.png',
-  subtitle: 'current rating'
-}, {
-  title: 'Remove',
-  icon: 'images/menu_icon.png',
-  subtitle: 'removes anime from lsit'
-}, {
-  title: 'Rewatch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'moves anime to watching list and sets status to rewatching'
-}, {
-  title: 'Episodes',
-  icon: 'images/menu_icon.png',
-  subtitile: 'Lists all episodes'
-}];
-
-var MAINLIST=  [{
-  title: 'Watching',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Currently watching anime'
-}, {
-  title: 'On hold',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime put on hold'
-}, {
-  title: 'Completed',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Completed anime'
-}, {
-  title: 'Plan to watch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime you want to watch'
-}];
-
 /*
 EXAMPLE JSON OBJECT TO SEND IN AJAX (I think)
 
@@ -92,6 +43,59 @@ var UI = require('ui');
 var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
+
+var OPTIONS = 
+[{
+  title: '+',
+  icon: 'images/plus.png',
+  subtitle: 'increments progress'
+} ,{
+  title: '-',
+  icon: 'images/minus.png',
+  subtitle: 'decrements progress'
+} ,{
+  title: 'Progress',
+  icon: 'images/progress.png',
+  subtitle: 'epsWatched/totEps'
+}, {
+  title: 'Rating',
+  icon: 'images/rating.png',
+  subtitle: 'current rating'
+}, {
+  title: 'Remove',
+  icon: 'images/remove.png',
+  subtitle: 'removes anime from lsit'
+}, {
+  title: 'Rewatch',
+  icon: 'images/rewatch.png',
+  subtitle: 'moves anime to watching list and sets status to rewatching'
+}, {
+  title: 'Episodes',
+  icon: 'images/episodes.png',
+  subtitile: 'Lists all episodes'
+}];
+
+var MAINLIST=  [{
+  title: 'Watching',
+  icon: 'images/watching.png',
+  subtitle: 'Currently watching anime'
+}, {
+  title: 'On hold',
+  icon: 'images/hold.png',
+  subtitle: 'Anime put on hold'
+}, {
+  title: 'Completed',
+  icon: 'images/complete.png',
+  subtitle: 'Completed anime'
+}, {
+  title: 'Dropped',
+  icon: 'images/dropped.png',
+  subtitle: 'Dropped anime'
+}, {
+  title: 'Plan to watch',
+  icon: 'images/planned.png',
+  subtitle: 'Anime you want to watch'
+}];
 
 /* ------ Test --------------------- */
 
@@ -323,6 +327,11 @@ function getPlanToWatchOptions(){
   return getOptions([0,4,6]);
 }
 
+function getDroppedOptions(){
+  return getOptions([1,3,4,6]);
+}
+
+
 function getStatusList(index){
   console.log('log10');
   switch(index){
@@ -330,6 +339,7 @@ function getStatusList(index){
     case 1: return getOnHoldOptions();
     case 2: return getCompletedOptions();
     case 3: return getPlanToWatchOptions();
+    case 4: return getDroppedOptions();
   }
 }
 
