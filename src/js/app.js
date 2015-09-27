@@ -1,3 +1,42 @@
+/*
+EXAMPLE JSON OBJECT TO SEND IN AJAX (I think)
+
+ajax(
+{
+  url: 'http://10.33.80.112:3000', // Translator URL
+  method: 'post',
+  type: 'json',
+  async: false,
+  headers: {
+    // Note, Base64.encode comes from `https://github.com/pastukhov/pebticz/blob/master/src/app.js`
+    Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
+  },
+  data: {
+    // MyAnimeList data
+    episode: 11,
+    status: 1,
+    score: 7,
+    downloaded_episodes: '',
+    storage_type: '',
+    storage_values: '',
+    times_rewatched: '',
+    rewatch_value: '',
+    date_start: '',
+    date_finish: '',
+    priority: '',
+    enable_discussion: '',
+    enable_rewatching: '',
+    comments: '',
+    fansub_group: '',
+    tags: '',
+
+    // Translator data
+    destination: 'http://myanimelist.net/api/animelist/add/21.xml'
+  }
+}
+*/
+
+
 /* ------ REQUIRE LIBRARIES -------- */
 
 var UI = require('ui');
