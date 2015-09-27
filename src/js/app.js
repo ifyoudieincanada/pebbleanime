@@ -1,48 +1,60 @@
-/*
-EXAMPLE JSON OBJECT TO SEND IN AJAX (I think)
-
-ajax(
-{
-  url: 'http://10.33.80.112:3000', // Translator URL
-  method: 'post',
-  type: 'json',
-  async: false,
-  headers: {
-    // Note, Base64.encode comes from `https://github.com/pastukhov/pebticz/blob/master/src/app.js`
-    Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
-  },
-  data: {
-    // MyAnimeList data
-    episode: 11,
-    status: 1,
-    score: 7,
-    downloaded_episodes: '',
-    storage_type: '',
-    storage_values: '',
-    times_rewatched: '',
-    rewatch_value: '',
-    date_start: '',
-    date_finish: '',
-    priority: '',
-    enable_discussion: '',
-    enable_rewatching: '',
-    comments: '',
-    fansub_group: '',
-    tags: '',
-
-    // Translator data
-    destination: 'http://myanimelist.net/api/animelist/add/21.xml'
-  }
-}
-*/
-
-
 /* ------ REQUIRE LIBRARIES -------- */
 
 var UI = require('ui');
 var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
+
+/* ------ GLOBAL ARRAYS ------ */
+
+var OPTIONS = 
+[{
+  title: '+',
+  icon: 'images/menu_icon.png',
+  subtitle: 'increments progress'
+} ,{
+  title: '-',
+  icon: 'images/menu_icon.png',
+  subtitle: 'decrements progress'
+} ,{
+  title: 'Progress',
+  icon: 'images/menu_icon.png',
+  subtitle: 'epsWatched/totEps'
+}, {
+  title: 'Rating',
+  icon: 'images/menu_icon.png',
+  subtitle: 'current rating'
+}, {
+  title: 'Remove',
+  icon: 'images/menu_icon.png',
+  subtitle: 'removes anime from lsit'
+}, {
+  title: 'Rewatch',
+  icon: 'images/menu_icon.png',
+  subtitle: 'moves anime to watching list and sets status to rewatching'
+}, {
+  title: 'Episodes',
+  icon: 'images/menu_icon.png',
+  subtitile: 'Lists all episodes'
+}];
+
+var MAINLIST=  [{
+  title: 'Watching',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Currently watching anime'
+}, {
+  title: 'On hold',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Anime put on hold'
+}, {
+  title: 'Completed',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Completed anime'
+}, {
+  title: 'Plan to watch',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Anime you want to watch'
+}];
 
 /* ------ Test ------ */
 
@@ -189,55 +201,6 @@ function animAjax(options, success, error) {
     error: error
   });
 }
-
-var OPTIONS = 
-[{
-  title: '+',
-  icon: 'images/menu_icon.png',
-  subtitle: 'increments progress'
-} ,{
-  title: '-',
-  icon: 'images/menu_icon.png',
-  subtitle: 'decrements progress'
-} ,{
-  title: 'Progress',
-  icon: 'images/menu_icon.png',
-  subtitle: 'epsWatched/totEps'
-}, {
-  title: 'Rating',
-  icon: 'images/menu_icon.png',
-  subtitle: 'current rating'
-}, {
-  title: 'Remove',
-  icon: 'images/menu_icon.png',
-  subtitle: 'removes anime from lsit'
-}, {
-  title: 'Rewatch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'moves anime to watching list and sets status to rewatching'
-}, {
-  title: 'Episodes',
-  icon: 'images/menu_icon.png',
-  subtitile: 'Lists all episodes'
-}];
-
-var MAINLIST=  [{
-  title: 'Watching',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Currently watching anime'
-}, {
-  title: 'On hold',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime put on hold'
-}, {
-  title: 'Completed',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Completed anime'
-}, {
-  title: 'Plan to watch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime you want to watch'
-}];
 
 /* ------ Main List ------*/
 function getMainElements(){
