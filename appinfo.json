@@ -72,6 +72,12 @@
                 "type": "png"
             },
             {
+                "file": "images/progress.png",
+                "menuIcon": true,
+                "name": "IMAGE_PROGRESS_ICON",
+                "type": "png"
+            },
+            {
                 "file": "images/rating.png",
                 "menuIcon": true,
                 "name": "IMAGE_RATING_ICON",
