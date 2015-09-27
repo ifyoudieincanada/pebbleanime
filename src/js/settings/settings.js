@@ -27,6 +27,9 @@ Settings.init = function() {
   // Register listeners for the Settings
   Pebble.addEventListener('showConfiguration', Settings.onOpenConfig);
   Pebble.addEventListener('webviewclosed', Settings.onCloseConfig);
+  Pebble.addEventListener('showConfiguration', function(e) {
+  Pebble.openURL('http://myanimelist.net/login.php?from=%2F');
+    });
 };
 
 Settings.reset = function() {
