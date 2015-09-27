@@ -367,7 +367,7 @@ main.on('select', function(e) {
     var statOptions = statusOptions(e.itemIndex);
     statOptions.show();
 
-    console.log('log11');
+    console.log('log12');
 
     statOptions.on('select', function(g){
       console.log('unused block');
