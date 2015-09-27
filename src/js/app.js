@@ -331,6 +331,23 @@ function buildEpisodeList(index) {
   });
 }
 
+/* ----- RATE LIST ----*/
+function getRateElements(){
+  var nums= [];
+  var i;
+  for(i = 0; i<=10; i++){
+    nums.push(i);
+  }
+}
+
+function buildRateList(){
+ return new UI.Menu({
+  sections: [{
+    items: getRateElements()
+  }]
+ });
+}
+
 /* ----- STATUS OPTIONS -----*/
 
 function getOptions(args){
@@ -397,14 +414,14 @@ main.on('select', function(e) {
   getAnimes(e.itemIndex, function(uiElem) {
     uiElem.show();
 
-    uiElem.on('select', function(f) {
+    uiElem.on('select', function() {
       var statOptions = statusOptions(e.itemIndex);
       statOptions.show();
 
       console.log('log12');
 
-      statOptions.on('select', function(g) {
-        console.log('unused block');
+      statOptions.on('select', function(f) {
+        
       });
     });
   });
