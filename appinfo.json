@@ -9,12 +9,13 @@
     "resources": {
         "media": [
             {
-                "file": "images/MALsplash.png",
+                "file": "images/MALicon.png",
+                "menuIcon": true,
                 "name": "IMAGE_LOGO_SPLASH",
                 "type": "png"
             },
             {
-                "file": "images/tile_splash.png",
+                "file": "images/MALsplash.png",
                 "name": "IMAGE_TILE_SPLASH",
                 "type": "png"
             },
@@ -22,12 +23,6 @@
                 "file": "fonts/UbuntuMono-Regular.ttf",
                 "name": "MONO_FONT_14",
                 "type": "font"
-            },
-            {
-                "file": "images/MALicon.png",
-                "menuIcon": true,
-                "name": "IMAGE_MENU_ICON",
-                "type": "png"
             },
             {
                 "file": "images/complete.png",
@@ -65,11 +60,6 @@
                 "type": "png"
             },
             {
-                "file": "images/progress.png",
-                "name": "IMAGE_PROGRESS_ICON",
-                "type": "png"
-            },
-            {
                 "file": "images/rating.png",
                 "name": "IMAGE_RATING_ICON",
                 "type": "png"
@@ -87,6 +77,11 @@
             {
                 "file": "images/watching.png",
                 "name": "IMAGE_WATCHING_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/progress.png",
+                "name": "IMAGE_PROGRESS_ICON",
                 "type": "png"
             }
         ]
