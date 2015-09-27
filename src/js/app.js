@@ -236,11 +236,8 @@ function animAjaxGet(destination, success, error) {
     url:    'http://10.33.80.112:3000', // Translator URL
     method: 'post',
     type:   'json',
-    headers: {
-      Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
-    },
     data: {
-      site_data:   {},
+      site_data: {},
       req_type: 'get',
       destination: destination
     }
@@ -251,6 +248,8 @@ function animAjaxGet(destination, success, error) {
   function(err) {
     error(err);
   });
+
+  console.log('called animajaxget');
 }
 
 /* ------ Main List ------*/
@@ -330,7 +329,7 @@ function getAnimes(which, callback) {
   // AJAX CALL IN THIS FUNCTION
   // index determines the specific list you are getting
 
-  var user = Settings.option('login');
+  var user = 'balrog95'; // Settings.option('login');
   var url = 'http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime';
 
   animAjaxGet(url, function(data) {
@@ -524,7 +523,10 @@ main.on('select', function(e) {
   console.log('selected: ' + e.itemIndex);
 
   getAnimes(e.itemIndex, function(animeList) {
+    console.log('about to show');
     animeList.show();
+
+    console.log('showing animes');
 
     animeList.on('select', function() {
       var statOptions = statusOptions(e.itemIndex);
