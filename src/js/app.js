@@ -165,14 +165,15 @@ var Base64 = {
   }
 };
 
-function animAjax(options, success, error) {
+/* ------ AJAX STUFF ------ */
+
+function animAjax(destination, options, success, error) {
   ajax({
-    url: 'http://10.33.80.112:3000', // Translator URL
+    url:    'http://10.33.80.112:3000', // Translator URL
     method: 'post',
-    type: 'json',
-    async: false,
+    type:   'json',
+    async:  false,
     headers: {
-      // Note, Base64.encode comes from `https://github.com/pastukhov/pebticz/blob/master/src/app.js`
       Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
     },
     data: {
@@ -195,7 +196,7 @@ function animAjax(options, success, error) {
       tags:                '',
 
       // Translator data
-      destination:         'http://myanimelist.net/api/animelist/add/21.xml'
+      destination:         destination
     },
     success: success,
     error: error
@@ -203,6 +204,7 @@ function animAjax(options, success, error) {
 }
 
 /* ------ Main List ------*/
+
 function getMainElements(){
   console.log('log3');
   return MAINLIST;
@@ -238,9 +240,19 @@ function formatAnimes(animeList) {
 }
 
 function getAnimes(index) {
-  console.log('log4');
   // AJAX CALL IN THIS FUNCTION
   // index determines the specific list you are getting
+
+  var url = 'http://myanimelist.net/malappinfo.php?u=balrog95&status=all&type=anime';
+
+  animAjax(url, {}, function(data) {
+    console.log('success: ' + data);
+  }, function(error) {
+    console.log('error: ' + error);
+  });
+
+  console.log('log4');
+
   return formatAnimes([{
     title: 'test 1',
     icon: 'images/menu_icon.png',
@@ -334,6 +346,7 @@ function getStatusList(index){
 }
 
 /* ------ STATUS OPTIONS ------ */
+
 function statusOptions(index){
   console.log('log11');
   return new UI.Menu({
