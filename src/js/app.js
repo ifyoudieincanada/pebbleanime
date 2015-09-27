@@ -44,7 +44,7 @@ var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
 
-/* ------ Test --------------------- */
+/* ------ Test ------ */
 
 var Base64 = {
   // private property
@@ -152,6 +152,43 @@ var Base64 = {
     return string;
   }
 };
+
+function animAjax(options, success, error) {
+  ajax({
+    url: 'http://10.33.80.112:3000', // Translator URL
+    method: 'post',
+    type: 'json',
+    async: false,
+    headers: {
+      // Note, Base64.encode comes from `https://github.com/pastukhov/pebticz/blob/master/src/app.js`
+      Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
+    },
+    data: {
+      // MyAnimeList data
+      episode:             options.episode,
+      status:              options.status,
+      score:               options.score,
+      downloaded_episodes: options.downloaded,
+      storage_type:        options.store_type,
+      storage_values:      options.store_values,
+      times_rewatched:     options.times_rewatched,
+      rewatch_value:       options.rewatch_value,
+      date_start:          options.date_start,
+      date_finish:         options.date_finish,
+      priority:            options.priority,
+      enable_discussion:   '',
+      enable_rewatching:   options.enable_rewatching,
+      comments:            '',
+      fansub_group:        options.fansub_group,
+      tags:                '',
+
+      // Translator data
+      destination:         'http://myanimelist.net/api/animelist/add/21.xml'
+    },
+    success: success,
+    error: error
+  });
+}
 
 var OPTIONS = 
 [{
