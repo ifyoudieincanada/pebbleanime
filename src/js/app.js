@@ -1,48 +1,11 @@
-/*
-EXAMPLE JSON OBJECT TO SEND IN AJAX (I think)
-
-ajax(
-{
-  url: 'http://10.33.80.112:3000', // Translator URL
-  method: 'post',
-  type: 'json',
-  async: false,
-  headers: {
-    // Note, Base64.encode comes from `https://github.com/pastukhov/pebticz/blob/master/src/app.js`
-    Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
-  },
-  data: {
-    // MyAnimeList data
-    episode: 11,
-    status: 1,
-    score: 7,
-    downloaded_episodes: '',
-    storage_type: '',
-    storage_values: '',
-    times_rewatched: '',
-    rewatch_value: '',
-    date_start: '',
-    date_finish: '',
-    priority: '',
-    enable_discussion: '',
-    enable_rewatching: '',
-    comments: '',
-    fansub_group: '',
-    tags: '',
-
-    // Translator data
-    destination: 'http://myanimelist.net/api/animelist/add/21.xml'
-  }
-}
-*/
-
-
 /* ------ REQUIRE LIBRARIES -------- */
 
 var UI = require('ui');
 var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
+
+/* ------ GLOBAL ARRAYS ------ */
 
 var OPTIONS = 
 [{
@@ -97,7 +60,7 @@ var MAINLIST=  [{
   subtitle: 'Anime you want to watch'
 }];
 
-/* ------ Test --------------------- */
+/* ------ Test ------ */
 
 var Base64 = {
   // private property
@@ -206,7 +169,72 @@ var Base64 = {
   }
 };
 
+/* ------ AJAX STUFF ------ */
+
+function animAjaxPost(destination, options, success, error) {
+  ajax({
+    url:    'http://10.33.80.112:3000', // Translator URL
+    method: 'post',
+    type:   'json',
+    async:  false,
+    headers: {
+      Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
+    },
+    data: {
+      // MyAnimeList data
+      site_data: {
+        episode:             options.episode,
+        status:              options.status,
+        score:               options.score,
+        downloaded_episodes: options.downloaded,
+        storage_type:        options.store_type,
+        storage_values:      options.store_values,
+        times_rewatched:     options.times_rewatched,
+        rewatch_value:       options.rewatch_value,
+        date_start:          options.date_start,
+        date_finish:         options.date_finish,
+        priority:            options.priority,
+        enable_discussion:   '',
+        enable_rewatching:   options.enable_rewatching,
+        comments:            '',
+        fansub_group:        options.fansub_group,
+        tags:                ''
+      },
+
+      // Translator data
+      req_type: 'post',
+      destination:         destination
+    }
+  },
+  function(data) {
+    success(data);
+  },
+  function(err) {
+    error(err);
+  });
+}
+
+function animAjaxGet(destination, success, error) {
+  ajax({
+    url:    'http://10.33.80.112:3000', // Translator URL
+    method: 'post',
+    type:   'json',
+    data: {
+      site_data:   {},
+      req_type: 'get',
+      destination: destination
+    }
+  },
+  function(data) {
+    success(data);
+  },
+  function(err) {
+    error(err);
+  });
+}
+
 /* ------ Main List ------*/
+
 function getMainElements(){
   console.log('log3');
   return MAINLIST;
@@ -224,45 +252,49 @@ function buildMainList(){
 /* ------ ANIME LIST CODE -------- */
 //To be called when getting anime from every sub-category
 
-function formatAnimes(animeList) {
+function formatAnimes(animeList, which) {
   console.log('log3');
-  var formatted_animes = [];
 
+  var animeMap = ['1', '3', '2', '6', '4']; // [watching, on-hold, completed, plan to watch, dropped]
+
+  var formatted_animes = [];
   var i;
   for (i = 0; i < animeList.length; i++) {
-    console.log('iteration: ' + i);
-
-    formatted_animes[i] = {
-      title: 'placeholder #' + i,
-      icon: 'images/menu_icon.png',
-      subtitle: 'description #' + i
-    };
+    if (animeMap[which] === animeList[i].my_status) {
+      formatted_animes.push({
+        title: animeList[i].series_title,
+        icon: 'images/menu_icon.png',
+        subtitle: animeList[i].series_synonyms,
+        anime_id: animeList[i].series_animedb_id
+      });
+    }
   }
   return formatted_animes;
 }
 
-function getAnimes(index) {
-  console.log('log4');
+function getAnimes(which, callback) {
   // AJAX CALL IN THIS FUNCTION
   // index determines the specific list you are getting
-  return formatAnimes([{
-    title: 'test 1',
-    icon: 'images/menu_icon.png',
-    subtitle: 'Brief description'
-  }, {
-    title: 'test 2',
-    icon: 'images/menu_icon.png',
-    subtitle: 'Another description'
-  }]);
-}
 
-function buildAnimeList(index) {
-  console.log('log5');
-  return new UI.Menu({
-    sections: [{
-      items: getAnimes(index)
-    }]
+  var user = 'balrog95';
+  var url = 'http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime';
+
+  animAjaxGet(url, function(data) {
+    console.log('success');
+
+    var uiElem = new UI.Menu({
+      sections: [{
+        items: formatAnimes(data.myanimelist.anime, which)
+      }]
+    });
+
+    callback(uiElem);
+
+  }, function(error) {
+    console.log('error: ' + error);
   });
+
+  console.log('log4');
 }
 
 /* ------ EPISODE LIST CODE -------- */
@@ -344,6 +376,7 @@ function getStatusList(index){
 }
 
 /* ------ STATUS OPTIONS ------ */
+
 function statusOptions(index){
   console.log('log11');
   return new UI.Menu({
@@ -360,17 +393,19 @@ main.show();
 
 main.on('select', function(e) {
   console.log('selected: ' + e.itemIndex);
-  var animeList=buildAnimeList(e.itemIndex);
-  animeList.show();
 
-  animeList.on('select', function(f){
-    var statOptions = statusOptions(e.itemIndex);
-    statOptions.show();
+  getAnimes(e.itemIndex, function(uiElem) {
+    uiElem.show();
 
-    console.log('log12');
+    uiElem.on('select', function(f) {
+      var statOptions = statusOptions(e.itemIndex);
+      statOptions.show();
 
-    statOptions.on('select', function(g){
-      console.log('unused block');
+      console.log('log12');
+
+      statOptions.on('select', function(g) {
+        console.log('unused block');
+      });
     });
   });
 });
