@@ -9,12 +9,13 @@
     "resources": {
         "media": [
             {
-                "file": "images/logo_splash.png",
+                "file": "images/MALicon.png",
+		"menuIcon": true,
                 "name": "IMAGE_LOGO_SPLASH",
                 "type": "png"
             },
             {
-                "file": "images/tile_splash.png",
+                "file": "images/MALsplash.png",
                 "name": "IMAGE_TILE_SPLASH",
                 "type": "png"
             },
@@ -24,9 +25,63 @@
                 "type": "font"
             },
             {
-                "file": "images/menu_icon.png",
-                "menuIcon": true,
+                "file": "images/complete.png",
                 "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/dropped.png",
+                "name": "IMAGE_DROPPED_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/episodes.png",
+                "name": "IMAGE_EPISODES_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/hold.png",
+                "name": "IMAGE_HOLD_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/minus.png",
+                "name": "IMAGE_MINUS_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/planned.png",
+                "name": "IMAGE_PLANNED_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/plus.png",
+                "name": "IMAGE_PLUS_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/rating.png",
+                "name": "IMAGE_rating_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/remove.png",
+                "name": "IMAGE_REMOVE_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/rewatch.png",
+                "name": "IMAGE_REWATCH_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/watching.png",
+                "name": "IMAGE_WATCHING_ICON",
+                "type": "png"
+            },
+	    {
+                "file": "images/progress.png",
+                "name": "IMAGE_PROGRESS_ICON",
                 "type": "png"
             }
         ]
