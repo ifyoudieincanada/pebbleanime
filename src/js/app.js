@@ -350,7 +350,7 @@ main.show();
 
 main.on('select', function(e) {
   console.log('selected: ' + e.itemIndex);
-  var animeList=buildAnimeList(e.itemIndex);
+  var animeList = buildAnimeList(e.itemIndex);
   animeList.show();
 
   animeList.on('select', function(f){
@@ -363,7 +363,4 @@ main.on('select', function(e) {
       console.log('unused block');
     });
   });
-
-  var epList = statusOptions();
-  epList.show();
 });
