@@ -1,3 +1,52 @@
+var OPTIONS = 
+[{
+  title: '+',
+  icon: 'images/menu_icon.png',
+  subtitle: 'increments progress'
+} ,{
+  title: '-',
+  icon: 'images/menu_icon.png',
+  subtitle: 'decrements progress'
+} ,{
+  title: 'Progress',
+  icon: 'images/menu_icon.png',
+  subtitle: 'epsWatched/totEps'
+}, {
+  title: 'Rating',
+  icon: 'images/menu_icon.png',
+  subtitle: 'current rating'
+}, {
+  title: 'Remove',
+  icon: 'images/menu_icon.png',
+  subtitle: 'removes anime from lsit'
+}, {
+  title: 'Rewatch',
+  icon: 'images/menu_icon.png',
+  subtitle: 'moves anime to watching list and sets status to rewatching'
+}, {
+  title: 'Episodes',
+  icon: 'images/menu_icon.png',
+  subtitile: 'Lists all episodes'
+}];
+
+var MAINLIST=  [{
+  title: 'Watching',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Currently watching anime'
+}, {
+  title: 'On hold',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Anime put on hold'
+}, {
+  title: 'Completed',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Completed anime'
+}, {
+  title: 'Plan to watch',
+  icon: 'images/menu_icon.png',
+  subtitle: 'Anime you want to watch'
+}];
+
 /*
 EXAMPLE JSON OBJECT TO SEND IN AJAX (I think)
 
@@ -152,55 +201,6 @@ var Base64 = {
     return string;
   }
 };
-
-var OPTIONS = 
-[{
-  title: '+',
-  icon: 'images/menu_icon.png',
-  subtitle: 'increments progress'
-} ,{
-  title: '-',
-  icon: 'images/menu_icon.png',
-  subtitle: 'decrements progress'
-} ,{
-  title: 'Progress',
-  icon: 'images/menu_icon.png',
-  subtitle: 'epsWatched/totEps'
-}, {
-  title: 'Rating',
-  icon: 'images/menu_icon.png',
-  subtitle: 'current rating'
-}, {
-  title: 'Remove',
-  icon: 'images/menu_icon.png',
-  subtitle: 'removes anime from lsit'
-}, {
-  title: 'Rewatch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'moves anime to watching list and sets status to rewatching'
-}, {
-  title: 'Episodes',
-  icon: 'images/menu_icon.png',
-  subtitile: 'Lists all episodes'
-}];
-
-var MAINLIST=  [{
-  title: 'Watching',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Currently watching anime'
-}, {
-  title: 'On hold',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime put on hold'
-}, {
-  title: 'Completed',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Completed anime'
-}, {
-  title: 'Plan to watch',
-  icon: 'images/menu_icon.png',
-  subtitle: 'Anime you want to watch'
-}];
 
 /* ------ Main List ------*/
 function getMainElements(){
@@ -363,7 +363,4 @@ main.on('select', function(e) {
       console.log('unused block');
     });
   });
-
-  var epList = statusOptions();
-  epList.show();
 });
