@@ -167,7 +167,7 @@ var Base64 = {
 
 /* ------ AJAX STUFF ------ */
 
-function animAjax(destination, options, success, error) {
+function animAjaxPost(destination, options, success, error) {
   ajax({
     url:    'http://10.33.80.112:3000', // Translator URL
     method: 'post',
@@ -178,28 +178,54 @@ function animAjax(destination, options, success, error) {
     },
     data: {
       // MyAnimeList data
-      episode:             options.episode,
-      status:              options.status,
-      score:               options.score,
-      downloaded_episodes: options.downloaded,
-      storage_type:        options.store_type,
-      storage_values:      options.store_values,
-      times_rewatched:     options.times_rewatched,
-      rewatch_value:       options.rewatch_value,
-      date_start:          options.date_start,
-      date_finish:         options.date_finish,
-      priority:            options.priority,
-      enable_discussion:   '',
-      enable_rewatching:   options.enable_rewatching,
-      comments:            '',
-      fansub_group:        options.fansub_group,
-      tags:                '',
+      site_data: {
+        episode:             options.episode,
+        status:              options.status,
+        score:               options.score,
+        downloaded_episodes: options.downloaded,
+        storage_type:        options.store_type,
+        storage_values:      options.store_values,
+        times_rewatched:     options.times_rewatched,
+        rewatch_value:       options.rewatch_value,
+        date_start:          options.date_start,
+        date_finish:         options.date_finish,
+        priority:            options.priority,
+        enable_discussion:   '',
+        enable_rewatching:   options.enable_rewatching,
+        comments:            '',
+        fansub_group:        options.fansub_group,
+        tags:                ''
+      },
 
       // Translator data
+      req_type: 'post',
       destination:         destination
-    },
-    success: success,
-    error: error
+    }
+  },
+  function(data) {
+    success(data);
+  },
+  function(err) {
+    error(err);
+  });
+}
+
+function animAjaxGet(destination, success, error) {
+  ajax({
+    url:    'http://10.33.80.112:3000', // Translator URL
+    method: 'post',
+    type:   'json',
+    data: {
+      site_data:   {},
+      req_type: 'get',
+      destination: destination
+    }
+  },
+  function(data) {
+    success(data);
+  },
+  function(err) {
+    error(err);
   });
 }
 
@@ -222,55 +248,56 @@ function buildMainList(){
 /* ------ ANIME LIST CODE -------- */
 //To be called when getting anime from every sub-category
 
-function formatAnimes(animeList) {
+function formatAnimes(animeList, which) {
   console.log('log3');
-  var formatted_animes = [];
 
+  var animeMap = ['1', '3', '2', '6', '4']; // [watching, on-hold, completed, plan to watch, dropped]
+
+  var formatted_animes = [];
   var i;
   for (i = 0; i < animeList.length; i++) {
-    console.log('iteration: ' + i);
+    console.log(animeMap[which]);
+    console.log(animeList[i].my_status);
+    console.log(animeMap[which] === animeList[i].my_status);
 
-    formatted_animes[i] = {
-      title: 'placeholder #' + i,
-      icon: 'images/menu_icon.png',
-      subtitle: 'description #' + i
-    };
+    if (animeMap[which] === animeList[i].my_status) {
+      console.log('iteration: ' + i);
+      console.log(JSON.stringify(animeList[i]));
+
+      formatted_animes.push({
+        title: animeList[i].series_title,
+        icon: 'images/menu_icon.png',
+        subtitle: animeList[i].series_synonyms,
+        anime_id: animeList[i].series_animedb_id
+      });
+    }
   }
   return formatted_animes;
 }
 
-function getAnimes(index) {
+function getAnimes(which, callback) {
   // AJAX CALL IN THIS FUNCTION
   // index determines the specific list you are getting
 
-  var url = 'http://myanimelist.net/malappinfo.php?u=balrog95&status=all&type=anime';
+  var user = 'balrog95';
+  var url = 'http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime';
 
-  animAjax(url, {}, function(data) {
-    console.log('success: ' + data);
+  animAjaxGet(url, function(data) {
+    console.log('success');
+
+    var uiElem = new UI.Menu({
+      sections: [{
+        items: formatAnimes(data.myanimelist.anime, which)
+      }]
+    });
+
+    callback(uiElem);
+
   }, function(error) {
     console.log('error: ' + error);
   });
 
   console.log('log4');
-
-  return formatAnimes([{
-    title: 'test 1',
-    icon: 'images/menu_icon.png',
-    subtitle: 'Brief description'
-  }, {
-    title: 'test 2',
-    icon: 'images/menu_icon.png',
-    subtitle: 'Another description'
-  }]);
-}
-
-function buildAnimeList(index) {
-  console.log('log5');
-  return new UI.Menu({
-    sections: [{
-      items: getAnimes(index)
-    }]
-  });
 }
 
 /* ------ EPISODE LIST CODE -------- */
@@ -363,17 +390,19 @@ main.show();
 
 main.on('select', function(e) {
   console.log('selected: ' + e.itemIndex);
-  var animeList = buildAnimeList(e.itemIndex);
-  animeList.show();
 
-  animeList.on('select', function(f){
-    var statOptions = statusOptions(e.itemIndex);
-    statOptions.show();
+  getAnimes(e.itemIndex, function(uiElem) {
+    uiElem.show();
 
-    console.log('log11');
+    uiElem.on('select', function(f){
+      var statOptions = statusOptions(e.itemIndex);
+      statOptions.show();
 
-    statOptions.on('select', function(g){
-      console.log('unused block');
+      console.log('log11');
+
+      statOptions.on('select', function(g){
+        console.log('unused block');
+      });
     });
   });
 });
