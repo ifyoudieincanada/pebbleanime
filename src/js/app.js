@@ -23,7 +23,8 @@ function formatAnimes(animeList) {
 }
 
 function getAnimes() {
-  return [{
+  // AJAX CALL IN THIS FUNCTION
+  return formatAnimes([{
     title: 'test 1',
     icon: 'images/menu_icon.png',
     subtitle: 'Brief description'
@@ -31,7 +32,7 @@ function getAnimes() {
     title: 'test 2',
     icon: 'images/menu_icon.png',
     subtitle: 'Another description'
-  }];
+  }]);
 }
 
 function buildAnimeList() {
@@ -61,6 +62,7 @@ function formatEpisodes(episodeList) {
 }
 
 function getEpisodes(index) {
+  // AJAX CALL IN THIS FUNCTION
   return formatEpisodes([]);
 }
 
