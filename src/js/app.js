@@ -256,14 +256,7 @@ function formatAnimes(animeList, which) {
   var formatted_animes = [];
   var i;
   for (i = 0; i < animeList.length; i++) {
-    console.log(animeMap[which]);
-    console.log(animeList[i].my_status);
-    console.log(animeMap[which] === animeList[i].my_status);
-
     if (animeMap[which] === animeList[i].my_status) {
-      console.log('iteration: ' + i);
-      console.log(JSON.stringify(animeList[i]));
-
       formatted_animes.push({
         title: animeList[i].series_title,
         icon: 'images/menu_icon.png',
