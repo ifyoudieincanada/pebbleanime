@@ -73,8 +73,8 @@ function buildEpisodeList(index) {
     }]
   });
 }
+/* ----- WATCHING STATUS OPTIONS -----*/
 
-/* ------ WATCHING STATUS OPTIONS ----- */
 function getWatchingStatus(){
   return [{
 	      title: '+',
