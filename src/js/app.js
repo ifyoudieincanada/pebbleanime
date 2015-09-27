@@ -442,6 +442,24 @@ function animeOptions(listItem, id) {
   }
 }
 
+/* ----- RATE LIST ----*/
+
+function getRateElements(){
+  var nums= [];
+  var i;
+  for(i = 0; i<=10; i++){
+    nums.push(i);
+  }
+}
+
+function buildRateList() {
+ return new UI.Menu({
+  sections: [{
+    items: getRateElements()
+  }]
+ });
+}
+
 /* ----- STATUS OPTIONS -----*/
 
 function getOptions(args){
