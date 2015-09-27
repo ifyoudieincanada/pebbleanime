@@ -73,38 +73,40 @@ function buildEpisodeList(index) {
     }]
   });
 }
+
 /* ----- WATCHING STATUS OPTIONS -----*/
 
 function getWatchingStatus(){
   return [{
-	      title: '+',
-              icon: 'images/menue_icon.png',
-              subtitle: 'increments progress'
-            } ,{
-              title: '-',
-              icon: 'images/menue_icon.png',
-              subtitle: 'decrements progress'
-            } ,{
-              title: 'Progress',
-              icon: 'images/menue_icon.png',
-              subtitle: 'epsWatched/totEps'
-            }, {
-              title: 'Rating',
-              icon: 'images/menue_icon.png',
-              subtitle: 'current rating'
-            }, {
-              title: 'Remove',
-              icon: 'images/menue_icon.png'
-         }];
+    title: '+',
+    icon: 'images/menue_icon.png',
+    subtitle: 'increments progress'
+  } ,{
+    title: '-',
+    icon: 'images/menue_icon.png',
+    subtitle: 'decrements progress'
+  } ,{
+    title: 'Progress',
+    icon: 'images/menue_icon.png',
+    subtitle: 'epsWatched/totEps'
+  }, {
+    title: 'Rating',
+    icon: 'images/menue_icon.png',
+    subtitle: 'current rating'
+  }, {
+    title: 'Remove',
+    icon: 'images/menue_icon.png'
+  }];
 }
 
 /* ------ STATUS OPTIONS ------ */
+
 function statusOptions(){
-	return new UI.Menu({
-	  sections: [{
-	    items: getWatchingStatus()
-	  }]
-        }); 
+  return new UI.Menu({
+    sections: [{
+      items: getWatchingStatus()
+    }]
+  }); 
 }
 
 /* ------ MAIN CODE -------- */
@@ -115,6 +117,6 @@ main.show();
 main.on('select', function(e) {
   console.log('selected: ' + e.itemIndex);
   var epList = statusOptions();
- // var epList = buildEpisodeList(e.itemIndex);
+  // var epList = buildEpisodeList(e.itemIndex);
   epList.show();
 });
