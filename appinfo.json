@@ -9,7 +9,7 @@
     "resources": {
         "media": [
             {
-                "file": "images/logo_splash.png",
+                "file": "images/MALsplash.png",
                 "name": "IMAGE_LOGO_SPLASH",
                 "type": "png"
             },
@@ -24,9 +24,75 @@
                 "type": "font"
             },
             {
-                "file": "images/menu_icon.png",
+                "file": "images/MALicon.png",
                 "menuIcon": true,
                 "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/complete.png",
+                "menuIcon": true,
+                "name": "IMAGE_COMPLETE_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/dropped.png",
+                "menuIcon": true,
+                "name": "IMAGE_DROPPED_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/episodes.png",
+                "menuIcon": true,
+                "name": "IMAGE_EPISODES_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/hold.png",
+                "menuIcon": true,
+                "name": "IMAGE_HOLD_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/minus.png",
+                "menuIcon": true,
+                "name": "IMAGE_MINUS_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/planned.png",
+                "menuIcon": true,
+                "name": "IMAGE_PLANNED_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/plus.png",
+                "menuIcon": true,
+                "name": "IMAGE_PLUS_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/rating.png",
+                "menuIcon": true,
+                "name": "IMAGE_rating_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/remove.png",
+                "menuIcon": true,
+                "name": "IMAGE_REMOVE_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/rewatch.png",
+                "menuIcon": true,
+                "name": "IMAGE_REWATCH_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/watching.png",
+                "menuIcon": true,
+                "name": "IMAGE_WATCHING_ICON",
                 "type": "png"
             }
         ]
