@@ -5,9 +5,102 @@ var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
 
+/* ------ LIST OBJECT ------ */
+
+function AnimeList(name) {
+  // Private
+  var fedNumber = 0;
+  var animArray = false;
+
+  // Public
+
+  this.setAnimeList = function(listOfAnime) {
+    var formattedAnimes = [];
+    var i;
+
+    for (i = 0; i < listOfAnime.length; i++) {
+      formattedAnimes.push({
+        title: listOfAnime[i].series_title,
+        icon: 'images/menu_icon.png',
+        subtitle: listOfAnime[i].series_synonyms,
+        anime_id: listOfAnime[i].series_animedb_id
+      });
+    }
+
+    animArray = formattedAnimes;
+  };
+
+  this.getTenMore = function() {
+    if (animArray) {
+      var retList = [];
+      var i;
+
+      for (i = 0; i < 10; i++) {
+        if (fedNumber + i < animArray.length) {
+          retList.push(animArray[fedNumber + i]);
+        }
+      }
+
+      fedNumber += 10;
+
+      return retList;
+    }
+    // Error out
+  };
+
+  this.storeData = function() { // This uses the pebble's stored data
+    if (animArray) {
+      console.log('stores data using: ' + name);
+    }
+    // Error out
+  };
+
+  this.fetchData = function() { // This uses the pebble's stored data
+    console.log('fetches data using: ' + name);
+    // Fills animArray with stored data, must handle no-data event
+  };
+
+  this.reset = function() {
+    fedNumber = 0;
+  };
+
+  this.addAnime = function(animeObj) {
+    if (animArray) {
+      animArray.push(animeObj);
+    }
+    // Error out
+  };
+
+  this.removeAnime = function(animeDatabaseID) {
+    var i;
+
+    if (animArray) {
+      for (i = 0; i < animArray.length; i++) {
+        if (animArray[i].anime_id === animeDatabaseID) {
+          return animArray.splice(i, 1);
+        }
+      }
+    }
+    // If it got here it did not find the anime to delete
+    // Error out
+  };
+}
+
+/* ------ ANIME LIST INTERACTIONS ------ */
+
+function moveAnime(from, to, id) {
+  to.addAnime(from.removeAnime(id));
+  // Call ajax function to move anime
+}
+
+function deleteAnime(from, id) {
+  from.removeAnime(id);
+  // Call ajax function to delete anime
+}
+
 /* ------ GLOBAL ARRAYS ------ */
 
-var OPTIONS = 
+var OPTIONS =
 [{
   title: '+',
   icon: 'images/plus.png',
@@ -49,31 +142,40 @@ var MAINLIST=  [{
   title: 'Watching',
   icon: 'images/watching.png',
   subtitle: 'Currently watching anime',
+  action_name: 'watching'
 }, {
   title: 'On hold',
   icon: 'images/hold.png',
   subtitle: 'Anime put on hold',
+  action_name: 'hold'
 }, {
   title: 'Completed',
   icon: 'images/complete.png',
   subtitle: 'Completed anime',
+  action_name: 'completed'
 }, {
   title: 'Dropped',
   icon: 'images/dropped.png',
-  subtitle: 'Dropped anime'
+  subtitle: 'Dropped anime',
+  action_name: 'dropped'
 }, {
   title: 'Plan to watch',
   icon: 'images/planned.png',
   subtitle: 'Anime you want to watch',
+  action_name: 'plan'
 }];
 
-/* ------ API FUNCTIONS ------ */
+/* ------ API URLs ------ */
 
-function update_anime_url(id) {
+function getAnimeUrl(username) {
+  return 'http://myanimelist.net/malappinfo.php?u=' + username + '&status=all&type=anime';
+}
+
+function updateAnimeUrl(id) {
   return  'http://myanimelist.net/api/animelist/update/' + id + '.xml';
 }
 
-function delete_anime_url(id) {
+function deleteAnimeUrl(id) {
   return 'http://myanimelist.net/api/animelist/delete/' + id + '.xml';
 }
 
@@ -289,6 +391,7 @@ function formatEpisodes(episodeList) {
 }
 
 function getEpisodes(index) {
+  console.log(index);
   console.log('log7');
   // AJAX CALL IN THIS FUNCTION
   return formatEpisodes([]);
@@ -327,11 +430,10 @@ function formatAnimes(animeList, which) {
 }
 
 function getAnimes(which, callback) {
-  // AJAX CALL IN THIS FUNCTION
   // index determines the specific list you are getting
 
   var user = Settings.option('login');
-  var url = 'http://myanimelist.net/malappinfo.php?u=' + user + '&status=all&type=anime';
+  var url = getAnimeUrl(user);
 
   animAjaxGet(url, function(data) {
     console.log('success');
@@ -354,9 +456,9 @@ function getAnimes(which, callback) {
 /* ------ ANIME INTERACTIONS ------ */
 
 function anime_add(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
     data.episode += 1;
-    animAjaxPost(update_anime_url(id), data, function(data_2) {
+    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
       console.log('success: ' + data_2);
     }, function(error_2) {
       console.log('error: ' + error_2);
@@ -367,9 +469,9 @@ function anime_add(id) {
 }
 
 function anime_sub(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
     data.episode -= 1;
-    animAjaxPost(update_anime_url(id), data, function(data_2) {
+    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
       console.log('success: ' + data_2);
     }, function(error_2) {
       console.log('error: ' + error_2);
@@ -380,9 +482,9 @@ function anime_sub(id) {
 }
 
 function anime_prog(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
     // menu here
-    animAjaxPost(update_anime_url(id), data, function(data_2) {
+    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
       console.log('success: ' + data_2);
     }, function(error_2) {
       console.log('error: ' + error_2);
@@ -393,7 +495,7 @@ function anime_prog(id) {
 }
 
 function anime_rate(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
     // menu here
     console.log('placeholder' + data);
   }, function(error) {
@@ -402,8 +504,8 @@ function anime_rate(id) {
 }
 
 function anime_remove(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
-    animAjaxPost(delete_anime_url(id), data, function(data_2) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
+    animAjaxPost(deleteAnimeUrl(id), data, function(data_2) {
       console.log(data_2 + ' successfully deleted');
     }, function(error_2) {
       console.log('error: ' + error_2);
@@ -414,9 +516,9 @@ function anime_remove(id) {
 }
 
 function anime_rewatch(id) {
-  animAjaxGet(update_anime_url(id), function(data) {
+  animAjaxGet(updateAnimeUrl(id), function(data) {
     data.enable_rewatching = '1';
-    animAjaxPost(update_anime_url(id), data, function(data_2) {
+    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
       console.log('good' + data_2);
     }, function(error_2) {
       console.log('no' + error_2);
@@ -473,7 +575,7 @@ function getOptions(args){
 }
 
 function getWatchingOptions(){
-  return getOptions([0,1,2,3,4,6]); 
+  return getOptions([0,1,2,3,4,6]);
 }
 
 function getOnHoldOptions(){
@@ -512,7 +614,91 @@ function statusOptions(index){
     sections: [{
       items: getStatusList(index)
     }]
-  }); 
+  });
+}
+
+/* ------ MAIN FUNCTION ------ */
+
+function mainFunc() {
+  var animeLists = {
+    watching:  new AnimeList('watching'),
+    hold:      new AnimeList('on-hold'),
+    completed: new AnimeList('completed'),
+    plan:      new AnimeList('plan-to-watch'),
+    dropped:   new AnimeList('dropped')
+  };
+
+  function setAnime(list) {
+    var i;
+    var watching = [];
+    var hold = [];
+    var completed = [];
+    var plan = [];
+    var dropped = [];
+
+    for (i = 0; i < list.length; i++) {
+      if (list[i].series_animedb_id === '1') {
+        watching.push(list[i]);
+      } else if (list[i].series_animedb_id === '3') {
+        hold.push(list[i]);
+      } else if (list[i].series_animedb_id === '2') {
+        completed.push(list[i]);
+      } else if (list[i].series_animedb_id === '6') {
+        plan.push(list[i]);
+      } else if (list[i].series_animedb_id === '4') {
+        dropped.push(list[i]);
+      }
+    }
+
+    animeLists.watching.setAnimeList(watching);
+    animeLists.hold.setAnimeList(hold);
+    animeLists.completed.setAnimeList(completed);
+    animeLists.plan.setAnimeList(plan);
+    animeLists.dropped.setAnimeList(dropped);
+  }
+
+  function getStoredAnime() {
+    animeLists.watching.fetchData();
+    animeLists.hold.fetchData();
+    animeLists.completed.fetchData();
+    animeLists.plan.fetchData();
+    animeLists.dropped.fetchData();
+  }
+
+  var user = Settings.option('login');
+  var url = getAnimeUrl(user);
+
+  animAjaxGet(url, function(data) {
+    console.log('success');
+    setAnime(data.myanimelist.anime);
+
+  }, function(error) {
+    console.log('error: ' + error);
+    getStoredAnime();
+
+  });
+
+  var main = new UI.Menu({
+    sections: [{
+      items: MAINLIST
+    }]
+  });
+  main.show();
+
+  main.on('select', function(e) {
+    console.log('selected: ' + e.action_name);
+
+    var aList = new UI.Menu({
+      suctions: [{
+        items: animeLists[e.action_name].getTenMore()
+      }]
+    });
+    aList.show();
+
+    aList.on('select', function(e) {
+      console.log('selected: ' + e.anime_id);
+    });
+  });
 }
 
 /* ------ MAIN CODE -------- */
