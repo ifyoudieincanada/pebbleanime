@@ -14,4 +14,4 @@ var url = {
   }
 };
 
-this.export = url;
+this.exports = url;
