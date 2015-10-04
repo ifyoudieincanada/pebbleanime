@@ -1,9 +1,14 @@
 /* ------ REQUIRE LIBRARIES -------- */
 
+console.log('SYSTEM REQUIRES');
+
 var UI = require('ui');
 var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
+
+console.log('CUSTOM REQUIRES');
+
 var AnimeList = require('animelist');
 var URL = require('url');
 var animAjax = require('animajax');

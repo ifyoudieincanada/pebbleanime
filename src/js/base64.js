@@ -111,3 +111,4 @@ var Base64 = {
   }
 };
 
+this.exports = Base64;
