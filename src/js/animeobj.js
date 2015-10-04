@@ -202,8 +202,9 @@ var anime = {
       episodeUI.show();
 
       episodeUI.on('select', function(e) {
+        var selectedEp = e.menu.state.sections[0].items[e.itemIndex];
         var currentEp = ajax_payload.episode;
-        ajax_payload.episode = e.title;
+        ajax_payload.episode = selectedEp.title;
 
         function contact() {
           animAjax.animAjaxPost(url.updateAnimeUrl(id), ajax_payload, function(data) {
@@ -256,8 +257,9 @@ var anime = {
       scoreUI.show();
 
       scoreUI.on('select', function(e) {
+        var selectedScore = e.menu.state.sections[0].items[e.itemIndex];
         var currentScore = ajax_payload.score;
-        ajax_payload.score = e.title;
+        ajax_payload.score = selectedScore.title;
 
         function contact() {
           animAjax.animAjaxPost(url.updateAnimeUrl(id), ajax_payload, function(data) {
