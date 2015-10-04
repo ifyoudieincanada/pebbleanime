@@ -4,99 +4,19 @@ var UI = require('ui');
 var Vector2 = require('vector2');
 var ajax = require('ajax');
 var Settings = require('settings'); //Caitlin
+var AnimeList = require('animelist');
+var URL = require('url');
+var animAjax = require('animajax');
 
-/* ------ LIST OBJECT ------ */
+/* ------ ANIME LISTS ------ */
 
-function AnimeList(name) {
-  // Private
-  var fedNumber = 0;
-  var animArray = false;
-
-  // Public
-
-  this.setAnimeList = function(listOfAnime) {
-    var formattedAnimes = [];
-    var i;
-
-    for (i = 0; i < listOfAnime.length; i++) {
-      formattedAnimes.push({
-        title: listOfAnime[i].series_title,
-        icon: 'images/menu_icon.png',
-        subtitle: listOfAnime[i].series_synonyms,
-        anime_id: listOfAnime[i].series_animedb_id
-      });
-    }
-
-    animArray = formattedAnimes;
-  };
-
-  this.getTenMore = function() {
-    if (animArray) {
-      var retList = [];
-      var i;
-
-      for (i = 0; i < 10; i++) {
-        if (fedNumber + i < animArray.length) {
-          retList.push(animArray[fedNumber + i]);
-        }
-      }
-
-      fedNumber += 10;
-
-      return retList;
-    }
-    // Error out
-  };
-
-  this.storeData = function() { // This uses the pebble's stored data
-    if (animArray) {
-      console.log('stores data using: ' + name);
-    }
-    // Error out
-  };
-
-  this.fetchData = function() { // This uses the pebble's stored data
-    console.log('fetches data using: ' + name);
-    // Fills animArray with stored data, must handle no-data event
-  };
-
-  this.reset = function() {
-    fedNumber = 0;
-  };
-
-  this.addAnime = function(animeObj) {
-    if (animArray) {
-      animArray.push(animeObj);
-    }
-    // Error out
-  };
-
-  this.removeAnime = function(animeDatabaseID) {
-    var i;
-
-    if (animArray) {
-      for (i = 0; i < animArray.length; i++) {
-        if (animArray[i].anime_id === animeDatabaseID) {
-          return animArray.splice(i, 1);
-        }
-      }
-    }
-    // If it got here it did not find the anime to delete
-    // Error out
-  };
-}
-
-/* ------ ANIME LIST INTERACTIONS ------ */
-
-function moveAnime(from, to, id) {
-  to.addAnime(from.removeAnime(id));
-  // Call ajax function to move anime
-}
-
-function deleteAnime(from, id) {
-  from.removeAnime(id);
-  // Call ajax function to delete anime
-}
+var animeLists = {
+  watching:  new AnimeList.AnimeList('watching'),
+  hold:      new AnimeList.AnimeList('on-hold'),
+  completed: new AnimeList.AnimeList('completed'),
+  plan:      new AnimeList.AnimeList('plan-to-watch'),
+  dropped:   new AnimeList.AnimeList('dropped')
+};
 
 /* ------ GLOBAL ARRAYS ------ */
 
@@ -165,195 +85,6 @@ var MAINLIST=  [{
   action_name: 'plan'
 }];
 
-/* ------ API URLs ------ */
-
-function getAnimeUrl(username) {
-  return 'http://myanimelist.net/malappinfo.php?u=' + username + '&status=all&type=anime';
-}
-
-function updateAnimeUrl(id) {
-  return  'http://myanimelist.net/api/animelist/update/' + id + '.xml';
-}
-
-function deleteAnimeUrl(id) {
-  return 'http://myanimelist.net/api/animelist/delete/' + id + '.xml';
-}
-
-/* ------ Test ------ */
-
-var Base64 = {
-  // private property
-  _keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
-  // public method for encoding
-  encode : function (input) {
-    var output = "";
-    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
-    var i = 0;
-    input = Base64._utf8_encode(input);
-    while (i < input.length) {
-      chr1 = input.charCodeAt(i++);
-      chr2 = input.charCodeAt(i++);
-      chr3 = input.charCodeAt(i++);
-      enc1 = chr1 >> 2;
-      enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
-      enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
-      enc4 = chr3 & 63;
-      if (isNaN(chr2)) {
-        enc3 = enc4 = 64;
-      } else if (isNaN(chr3)) {
-        enc4 = 64;
-      }
-      output = output +
-        this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
-        this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
-    }
-    return output;
-  },
-  // public method for decoding
-  decode : function (input) {
-    var output = "";
-    var chr1, chr2, chr3;
-    var enc1, enc2, enc3, enc4;
-    var i = 0;
-    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
-    while (i < input.length) {
-      enc1 = this._keyStr.indexOf(input.charAt(i++));
-      enc2 = this._keyStr.indexOf(input.charAt(i++));
-      enc3 = this._keyStr.indexOf(input.charAt(i++));
-      enc4 = this._keyStr.indexOf(input.charAt(i++));
-      chr1 = (enc1 << 2) | (enc2 >> 4);
-      chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
-      chr3 = ((enc3 & 3) << 6) | enc4;
-      output = output + String.fromCharCode(chr1);
-      if (enc3 !== 64) {
-        output = output + String.fromCharCode(chr2);
-      }
-      if (enc4 !== 64) {
-        output = output + String.fromCharCode(chr3);
-      }
-    }
-    output = Base64._utf8_decode(output);
-    return output;
-  },
-  // private method for UTF-8 encoding
-  _utf8_encode : function (string) {
-    string = string.replace(/\r\n/g,"\n");
-    var utftext = "";
-    var n;
-    var c;
-    for (n = 0; n < string.length; n++) {
-      c = string.charCodeAt(n);
-      if (c < 128) {
-        utftext += String.fromCharCode(c);
-      }
-      else if((c > 127) && (c < 2048)) {
-        utftext += String.fromCharCode((c >> 6) | 192);
-        utftext += String.fromCharCode((c & 63) | 128);
-      }
-      else {
-        utftext += String.fromCharCode((c >> 12) | 224);
-        utftext += String.fromCharCode(((c >> 6) & 63) | 128);
-        utftext += String.fromCharCode((c & 63) | 128);
-      }
-    }
-    return utftext;
-  },
-  // private method for UTF-8 decoding
-  _utf8_decode : function (utftext) {
-    var string = "";
-    var i = 0;
-    var c = 0;
-    //        var c1 = 0;
-    var c2 = 0;
-    var c3 = 0;
-    while ( i < utftext.length ) {
-      c = utftext.charCodeAt(i);
-      if (c < 128) {
-        string += String.fromCharCode(c);
-        i++;
-      }
-      else if((c > 191) && (c < 224)) {
-        c2 = utftext.charCodeAt(i+1);
-        string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
-        i += 2;
-      }
-      else {
-        c2 = utftext.charCodeAt(i+1);
-        c3 = utftext.charCodeAt(i+2);
-        string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
-        i += 3;
-      }
-    }
-    return string;
-  }
-};
-
-/* ------ AJAX STUFF ------ */
-
-function animAjaxPost(destination, options, success, error) {
-  ajax({
-    url:    'http://10.33.80.112:3000', // Translator URL
-    method: 'post',
-    type:   'json',
-    async:  false,
-    headers: {
-      Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
-    },
-    data: {
-      // MyAnimeList data
-      site_data: {
-        episode:             options.episode,
-        status:              options.status,
-        score:               options.score,
-        downloaded_episodes: options.downloaded_episodes,
-        storage_type:        options.storage_type,
-        storage_values:      options.storage_values,
-        times_rewatched:     options.times_rewatched,
-        rewatch_value:       options.rewatch_value,
-        date_start:          options.date_start,
-        date_finish:         options.date_finish,
-        priority:            options.priority,
-        enable_discussion:   '',
-        enable_rewatching:   options.enable_rewatching,
-        comments:            '',
-        fansub_group:        options.fansub_group,
-        tags:                ''
-      },
-
-      // Translator data
-      req_type: 'post',
-      destination:         destination
-    }
-  },
-  function(data) {
-    success(data);
-  },
-  function(err) {
-    error(err);
-  });
-}
-
-function animAjaxGet(destination, success, error) {
-  ajax({
-    url:    'http://10.33.80.112:3000', // Translator URL
-    method: 'post',
-    type:   'json',
-    headers: {
-      Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
-    },
-    data: {
-      site_data:   {},
-      req_type: 'get',
-      destination: destination
-    }
-  },
-  function(data) {
-    success(data);
-  },
-  function(err) {
-    error(err);
-  });
-}
 
 /* ------ Main List ------*/
 
@@ -433,9 +164,9 @@ function getAnimes(which, callback) {
   // index determines the specific list you are getting
 
   var user = Settings.option('login');
-  var url = getAnimeUrl(user);
+  var url = URL.getAnimeUrl(user);
 
-  animAjaxGet(url, function(data) {
+  animAjax.animAjaxGet(url, function(data) {
     console.log('success');
 
     var uiElem = new UI.Menu({
@@ -451,97 +182,6 @@ function getAnimes(which, callback) {
   });
 
   console.log('log4');
-}
-
-/* ------ ANIME INTERACTIONS ------ */
-
-function anime_add(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    data.episode += 1;
-    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
-      console.log('success: ' + data_2);
-    }, function(error_2) {
-      console.log('error: ' + error_2);
-    });
-  }, function(error) {
-    console.log('error: ' + error);
-  });
-}
-
-function anime_sub(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    data.episode -= 1;
-    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
-      console.log('success: ' + data_2);
-    }, function(error_2) {
-      console.log('error: ' + error_2);
-    });
-  }, function(error) {
-    console.log('error: ' + error);
-  });
-}
-
-function anime_prog(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    // menu here
-    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
-      console.log('success: ' + data_2);
-    }, function(error_2) {
-      console.log('error: ' + error_2);
-    });
-  }, function(error) {
-    console.log('error: ' + error);
-  });
-}
-
-function anime_rate(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    // menu here
-    console.log('placeholder' + data);
-  }, function(error) {
-    console.log('error: ' + error);
-  });
-}
-
-function anime_remove(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    animAjaxPost(deleteAnimeUrl(id), data, function(data_2) {
-      console.log(data_2 + ' successfully deleted');
-    }, function(error_2) {
-      console.log('error: ' + error_2);
-    });
-  }, function(error) {
-    console.log('error: ' + error);
-  });
-}
-
-function anime_rewatch(id) {
-  animAjaxGet(updateAnimeUrl(id), function(data) {
-    data.enable_rewatching = '1';
-    animAjaxPost(updateAnimeUrl(id), data, function(data_2) {
-      console.log('good' + data_2);
-    }, function(error_2) {
-      console.log('no' + error_2);
-    });
-  }, function(error) {
-    console.log('no' + error);
-  });
-}
-
-function anime_episodes(id) {
-  buildEpisodeList(id);
-}
-
-function animeOptions(listItem, id) {
-  switch(listItem.opt_id) {
-    case 0: return anime_add(id);
-    case 1: return anime_sub(id);
-    case 2: return anime_prog(id);
-    case 3: return anime_rate(id);
-    case 4: return anime_remove(id);
-    case 5: return anime_rewatch(id);
-    case 6: return anime_episodes(id);
-  }
 }
 
 /* ----- RATE LIST ----*/
@@ -619,15 +259,7 @@ function statusOptions(index){
 
 /* ------ MAIN FUNCTION ------ */
 
-function mainFunc() {
-  var animeLists = {
-    watching:  new AnimeList('watching'),
-    hold:      new AnimeList('on-hold'),
-    completed: new AnimeList('completed'),
-    plan:      new AnimeList('plan-to-watch'),
-    dropped:   new AnimeList('dropped')
-  };
-
+function main() {
   function setAnime(list) {
     var i;
     var watching = [];
@@ -666,9 +298,9 @@ function mainFunc() {
   }
 
   var user = Settings.option('login');
-  var url = getAnimeUrl(user);
+  var url = URL.getAnimeUrl(user);
 
-  animAjaxGet(url, function(data) {
+  animAjax.animAjaxGet(url, function(data) {
     console.log('success');
     setAnime(data.myanimelist.anime);
 
@@ -678,50 +310,30 @@ function mainFunc() {
 
   });
 
-  var main = new UI.Menu({
+  var mainUI = new UI.Menu({
     sections: [{
       items: MAINLIST
     }]
   });
-  main.show();
+  mainUI.show();
 
-  main.on('select', function(e) {
+  mainUI.on('select', function(e) {
     console.log('selected: ' + e.action_name);
 
-    var aList = new UI.Menu({
+    var aListUI = new UI.Menu({
       suctions: [{
         items: animeLists[e.action_name].getTenMore()
       }]
     });
-    aList.show();
+    aListUI.show();
 
-    aList.on('select', function(e) {
+    aListUI.on('select', function(e) {
       console.log('selected: ' + e.anime_id);
+      // animeOptions(g, e.anime_id);
     });
   });
 }
 
 /* ------ MAIN CODE -------- */
 
-var main = buildMainList();
-main.show();
-
-main.on('select', function(e) {
-  console.log('selected: ' + e.itemIndex);
-
-  getAnimes(e.itemIndex, function(animeList) {
-    animeList.show();
-
-    animeList.on('select', function() {
-      var statOptions = statusOptions(e.itemIndex);
-      statOptions.show();
-
-      console.log('log12');
-
-      statOptions.on('select', function(g) {
-        animeOptions(g, e.anime_id);
-        console.log('unused block');
-      });
-    });
-  });
-});
+main();
