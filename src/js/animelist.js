@@ -4,7 +4,7 @@ var anime = require('animeobj');
 
 /* ------ LIST OBJECT ------ */
 
-function AnimeList(name) {
+function AnimeList(name, options) {
   // Private
   var fedNumber = 0;
   var animArray = false;
@@ -13,6 +13,7 @@ function AnimeList(name) {
   // Public
 
   this.name = name;
+  this.options = {};
   this.list = '';
 
   this.setAnimeList = function(listOfAnime) {
@@ -23,7 +24,7 @@ function AnimeList(name) {
       formattedAnimes.push({
         title: listOfAnime[i].series_title,
         icon: 'images/menu_icon.png',
-        animeObj: new anime.Anime(listOfAnime[i], aListObj, aListObj.list)
+        animeObj: new anime.Anime(listOfAnime[i], aListObj, aListObj.list, options)
       });
     }
 

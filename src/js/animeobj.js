@@ -6,7 +6,7 @@ var animAjax = require('animAjax');
 
 /* ------ ANIME OBJECT ------ */
 
-function Anime(animObj, listObj, lists) {
+function Anime(animObj, listObj, lists, options) {
   var ajax_payload = {
     episode:             animObj.my_watched_episodes,
     status:              animObj.my_status,
@@ -28,6 +28,7 @@ function Anime(animObj, listObj, lists) {
 
   var id = animObj.series_animedb_id;
   var episodes = animObj.series_episodes;
+  var animeObj = this;
 
   var retryCount = 0;
 
@@ -37,6 +38,68 @@ function Anime(animObj, listObj, lists) {
 
   this.store = function() {
     console.log('save ajax_payload and other variables to pebble');
+  };
+
+  this.statusOptions = function() {
+    var optionMap = {
+      increment: {
+        title: '+',
+        icon: 'images/plus.png',
+        subtitle: 'increments progress',
+        func: function() {
+          animeObj.increment();
+        }
+      },
+      decrement: {
+        title: '-',
+        icon: 'images/minus.png',
+        subtitle: 'decrements progress',
+        func: function() {
+          animeObj.decrement();
+        }
+      },
+      progress: {
+        title: 'Progress',
+        icon: 'images/progress.png',
+        subtitle: 'epsWatched/totEps',
+        func: function() {
+          animeObj.progress();
+        }
+      },
+      rate: {
+        title: 'Rating',
+        icon: 'images/rating.png',
+        subtitle: 'current rating',
+        func: function() {
+          animeObj.rate();
+        }
+      },
+      remove: {
+        title: 'Remove',
+        icon: 'images/remove.png',
+        subtitle: 'removes anime from list',
+        func: function() {
+          animeObj.remove();
+        }
+      },
+      rewatch: {
+        title: 'Rewatch',
+        icon: 'images/rewatch.png',
+        subtitle: 'moves to rewatch list',
+        func: function() {
+          animeObj.rewatch();
+        }
+      }
+    };
+    var i;
+
+    var uiList = [];
+
+    for (i = 0; i < options.lenth; i++) {
+      uiList.push(optionMap[options[i]]);
+    }
+
+    return uiList;
   };
 
   this.increment = function() {
@@ -238,7 +301,7 @@ function Anime(animObj, listObj, lists) {
     contact();
   };
 
-  this.animeRewatch = function() {
+  this.rewatch = function() {
     lists.watching.addAnime(listObj.removeAnime(id));
     ajax_payload.enable_rewatching = '1';
 
