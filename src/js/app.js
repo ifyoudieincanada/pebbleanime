@@ -18,6 +18,8 @@ var animeLists = {
   dropped:   new AnimeList.AnimeList('dropped')
 };
 
+var animeListStrings = ['watching', 'hold', 'completed', 'plan', 'dropped'];
+
 /* ------ ANIME LIST INTERACTIONS ------ */
 
 function setAnime(list) {
@@ -299,6 +301,11 @@ function statusOptions(index){
 /* ------ MAIN FUNCTION ------ */
 
 function main() {
+  var item;
+
+  for (item = 0; item < animeListStrings.length; item++) {
+    animeLists[animeListStrings[item]].list = animeLists;
+  }
 
   var user = Settings.option('login');
   var url = URL.getAnimeUrl(user);

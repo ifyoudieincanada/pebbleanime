@@ -1,6 +1,6 @@
 /* ------ REQUIRE LIBRARIES ------ */
 
-var anime = require('anime');
+var anime = require('animeobj');
 
 /* ------ LIST OBJECT ------ */
 
@@ -8,10 +8,12 @@ function AnimeList(name) {
   // Private
   var fedNumber = 0;
   var animArray = false;
+  var aListObj = this;
 
   // Public
 
   this.name = name;
+  this.list = '';
 
   this.setAnimeList = function(listOfAnime) {
     var formattedAnimes = [];
@@ -21,7 +23,7 @@ function AnimeList(name) {
       formattedAnimes.push({
         title: listOfAnime[i].series_title,
         icon: 'images/menu_icon.png',
-        animeObj: new anime.Anime(listOfAnime[i])
+        animeObj: new anime.Anime(listOfAnime[i], aListObj, aListObj.list)
       });
     }
 
