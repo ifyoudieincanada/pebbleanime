@@ -144,33 +144,36 @@ function main() {
   mainUI.show();
 
   mainUI.on('select', function(e) {
-    console.log('selected: ' + e.actionName);
+    var mainItem = e.menu.state.sections[0].items[e.itemIndex];
+    console.log(JSON.stringify(mainItem));
 
     console.log('building anime list UI');
     var aListUI = new UI.Menu({
       suctions: [{
-        items: animeLists[e.actionName].getTenMore()
+        items: animeLists[mainItem.actionName].getTenMore()
       }]
     });
     console.log('showing anime list UI');
     aListUI.show();
 
     aListUI.on('select', function(f) {
-      console.log('show options for: ' + f.title);
+      var aListItem = f.menu.state.sections[0].items[f.itemIndex];
+      console.log('show options for: ' + aListItem.title);
 
       console.log('building anime options UI');
       var animeOptsUI = new UI.menu({
         sections: [{
-          items: f.animeObj.statusOptions()
+          items: aListItem.animeObj.statusOptions()
         }]
       });
       console.log('showing anime options UI');
       animeOptsUI.show();
 
       animeOptsUI.on('select', function(g) {
-        console.log('selected item: ' + g.title);
+        var animeItem = g.menu.state.sections[0].items[f.itemIndex];
+        console.log('selected item: ' + animeItem.title);
 
-        g.func();
+        animeItem.func();
       });
     });
   });
