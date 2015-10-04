@@ -1,4 +1,8 @@
-/* ------ Test ------ */
+/**
+ * Author: pastukhov @ github
+ * URL: https://github.com/pastukhov/pebticz
+ * License: ???
+ */
 
 var Base64 = {
   // private property
