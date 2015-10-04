@@ -5,6 +5,8 @@ var anime = require('animeobj');
 /* ------ LIST OBJECT ------ */
 
 function AnimeList(name, options) {
+  console.log('New AnimeList object created');
+
   // Private
   var fedNumber = 0;
   var animArray = false;
@@ -17,6 +19,7 @@ function AnimeList(name, options) {
   this.list = '';
 
   this.setAnimeList = function(listOfAnime) {
+    console.log('setting anime list');
     var formattedAnimes = [];
     var i;
 
@@ -32,6 +35,7 @@ function AnimeList(name, options) {
   };
 
   this.getTenMore = function() {
+    console.log('getting 10 more animes for list UI');
     if (animArray) {
       var retList = [];
       var i;
@@ -62,10 +66,12 @@ function AnimeList(name, options) {
   };
 
   this.reset = function() {
+    console.log('reset called');
     fedNumber = 0;
   };
 
   this.addAnime = function(animeObj) {
+    console.log('addAnime called');
     if (animArray) {
       animArray.push(animeObj);
     }
@@ -73,6 +79,7 @@ function AnimeList(name, options) {
   };
 
   this.removeAnime = function(animeDatabaseID) {
+    console.log('removeAnime called');
     var i;
 
     if (animArray) {

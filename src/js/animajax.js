@@ -7,6 +7,8 @@ var Settings = require('settings');
 /* ------ AJAX STUFF ------ */
 
 function animAjaxPost(destination, options, success, error) {
+  console.log('about to make ajax POST request');
+
   ajax({
     url:    'http://dank.software:3000', // Translator URL
     method: 'post',
@@ -42,14 +44,20 @@ function animAjaxPost(destination, options, success, error) {
     }
   },
   function(data) {
+    console.log('POST request success');
     success(data);
   },
   function(err) {
+    console.log('POST request error');
     error(err);
   });
+
+  console.log('ajax POST request sent');
 }
 
 function animAjaxGet(destination, success, error) {
+  console.log('about to make ajax GET request');
+
   ajax({
     url:    'http://dank.software:3000', // Translator URL
     method: 'post',
@@ -64,10 +72,13 @@ function animAjaxGet(destination, success, error) {
     }
   },
   function(data) {
+    console.log('GET request success');
     success(data);
   },
   function(err) {
+    console.log('GET request error');
     error(err);
   });
+  console.log('ajax GET request sent');
 }
 

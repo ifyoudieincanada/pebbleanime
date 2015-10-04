@@ -7,6 +7,8 @@ var animAjax = require('animAjax');
 /* ------ ANIME OBJECT ------ */
 
 function Anime(animObj, listObj, lists, options) {
+  console.log('New Anime object created');
+
   var ajax_payload = {
     episode:             animObj.my_watched_episodes,
     status:              animObj.my_status,
@@ -41,6 +43,8 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.statusOptions = function() {
+    console.log('Determining which status options to show');
+
     var optionMap = {
       increment: {
         title: '+',
@@ -103,6 +107,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.increment = function() {
+    console.log('Calling increment');
     // Increment the number of episodes watched
     if (ajax_payload.episode < episodes -1+1) { // -1+1 to make sure comparing Ints
       ajax_payload.episode -= 1;
@@ -139,6 +144,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.decrement = function() {
+    console.log('Calling decrement');
     // Decrement the number of episodes watched
     if (ajax_payload.episode > 1) { // -1+1 to make sure comparing Ints
       ajax_payload.episode -= 1;
@@ -170,6 +176,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.progress = function() {
+    console.log('Calling progress');
     // Show list UI from 1 to episodes
     var i;
     var epList = [];
@@ -180,12 +187,13 @@ function Anime(animObj, listObj, lists, options) {
       });
     }
 
+    console.log('building episode UI');
     var episodeUI =  new UI.Menu({
       suctions: [{
         items: epList
       }]
     });
-
+    console.log('showing episode UI');
     episodeUI.show();
 
     episodeUI.on('select', function(e) {
@@ -222,6 +230,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.rate = function() {
+    console.log('Calling rate');
     // Show list UI from 1 to 10
     var i;
     var scoreList = [];
@@ -232,12 +241,13 @@ function Anime(animObj, listObj, lists, options) {
       });
     }
 
+    console.log('building score UI');
     var scoreUI =  new UI.Menu({
       suctions: [{
         items: scoreList
       }]
     });
-
+    console.log('showing score UI');
     scoreUI.show();
 
     scoreUI.on('select', function(e) {
@@ -274,6 +284,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.remove = function() {
+    console.log('calling remove');
     listObj.removeAnime(id);
 
     function contact() {
@@ -302,6 +313,7 @@ function Anime(animObj, listObj, lists, options) {
   };
 
   this.rewatch = function() {
+    console.log('calling rewatch');
     lists.watching.addAnime(listObj.removeAnime(id));
     ajax_payload.enable_rewatching = '1';
 
