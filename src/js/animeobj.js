@@ -40,15 +40,24 @@ var anime = {
     var retryCount = 0;
 
     this.fetch = function() {
-      // use localStorage
-      // convert data from string
       console.log('fill ajax_payload and other variables with data');
+
+      var f = localStorage.getItem('anime_' + id);
+
+      if (f) {
+        var pf = JSON.parse(f);
+
+        ajax_payload = pf;
+
+        return;
+      }
+      // Error out
     };
 
     this.store = function() {
-      // use localStorage
-      // convert data to string (probably with JSON.stringify())
       console.log('save ajax_payload and other variables to pebble');
+
+      localStorage.setItem('anime_' + id, JSON.stringify(ajax_payload));
     };
 
     this.statusOptions = function() {
