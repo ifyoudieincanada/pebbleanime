@@ -1,8 +1,8 @@
 {
     "appKeys": {
-      "KEY_USERNAME": "TEMP",
-      "KEY_PASSWORD": "TEMP",
-      "KEY_BG_COLOR": "#000000"
+      "KEY_USERNAME": 0,
+      "KEY_PASSWORD": 1,
+      "KEY_BG_COLOR": 2
     },
     "capabilities": [
         "configurable"

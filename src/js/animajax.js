@@ -6,6 +6,22 @@ var ajax = require('ajax');
 var Base64 = require('base64');
 var Settings = require('settings');
 
+/* ------ PRIVATE FUNCTIONS ------ */
+
+function authorization() {
+  if (localStorage.getItem('settings')) {
+    var username = localStorage.getItem('settings_username');
+    var password = localStorage.getItem('settings_password');
+
+    if (username) {
+      if (password) {
+        return 'Basic ' + Base64.encode(username + ':' + password);
+      }
+    }
+  }
+  return '';
+}
+
 /* ------ AJAX STUFF ------ */
 
 var animajax = {
@@ -19,7 +35,7 @@ var animajax = {
       type:   'json',
       async:  false,
       headers: {
-        Authorization: "Basic " + Base64.encode(Settings.option('KEY_USERNAME') + ":" + Settings.option('KEY_PASSWORD')),
+        Authorization: authorization()
       },
       data: {
         // MyAnimeList data
@@ -67,7 +83,7 @@ var animajax = {
       method: 'post',
       type:   'json',
       headers: {
-        Authorization: "Basic " + Base64.encode(Settings.option('login') + ":" + Settings.option('password')),
+        Authorization: authorization()
       },
       data: {
         site_data:   {},

@@ -28,23 +28,30 @@ Settings.init = function() {
   // Pebble.addEventListener('showConfiguration', Settings.onOpenConfig);
   // Pebble.addEventListener('webviewclosed', Settings.onCloseConfig);
   Pebble.addEventListener('showConfiguration', function(e) {
+    console.log('UNUSED e: ' + e);
     Pebble.openURL('http://ifyoudieincanada.github.io');
   });
   Pebble.addEventListener('webviewclosed', function(e) {
     var config_data = JSON.parse(decodeURIComponent(e.response));
     console.log('Config window returned: ' + JSON.stringify(config_data));
 
-    var dict = {
-      'KEY_USERNAME': config_data['username'],
-      'KEY_PASSWORD': config_data['password'],
-      'KEY_BG_COLOR': config_data['background_color']
-    };
+    localStorage.setItem('settings_username', config_data.username);
+    localStorage.setItem('settings_password', config_data.password);
+    localStorage.setItem('settings_bg_color', config_data.background_color);
 
-    Pebble.sendAppMessage(dict, function() {
-      console.log('Sent config data to Pebble: ' + JSON.stringify(dict));
-    }, function() {
-      console.log('Failed to send config data');
-    });
+    // var dict = {
+    //   'KEY_USERNAME': config_data.username,
+    //   'KEY_PASSWORD': config_data.password,
+    //   'KEY_BG_COLOR': config_data.background_color
+    // };
+
+    // Pebble.sendAppMessage(dict, function(e) {
+    //   console.log('UNUSED e: ' + e);
+    //   console.log('Sent config data to Pebble: ' + JSON.stringify(dict));
+    // }, function(e) {
+    //   console.log('UNUSED e: ' + e);
+    //   console.log('Failed to send config data');
+    // });
   });
 };
 

@@ -107,6 +107,16 @@ function getStoredAnime() {
   console.log('list objects fetched');
 }
 
+function getUsername() {
+  var u = localStorage.getItem('settings_username');
+  if (u) {
+    console.log('found stored username: ' + u);
+    return u;
+  }
+  console.log('username not stored, ask user to configure app');
+  // TELL THE USER TO CONFIGURE THE APP
+}
+
 /* ------ MAIN FUNCTION ------ */
 
 function main() {
@@ -118,7 +128,7 @@ function main() {
   }
   console.log('each anime list can reference lists object');
 
-  var user = Settings.option('login');
+  var user = getUsername();
   var url = URL.getAnimeUrl(user);
 
   console.log('launching ajax get for user: ' + user);
