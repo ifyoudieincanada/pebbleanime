@@ -25,11 +25,27 @@ Settings.init = function() {
   Settings._loadData();
 
   // Register listeners for the Settings
-  Pebble.addEventListener('showConfiguration', Settings.onOpenConfig);
-  Pebble.addEventListener('webviewclosed', Settings.onCloseConfig);
+  // Pebble.addEventListener('showConfiguration', Settings.onOpenConfig);
+  // Pebble.addEventListener('webviewclosed', Settings.onCloseConfig);
   Pebble.addEventListener('showConfiguration', function(e) {
-  Pebble.openURL('http://myanimelist.net/login.php?from=%2F');
+    Pebble.openURL('http://ifyoudieincanada.github.io');
+  });
+  Pebble.addEventListener('webviewclosed', function(e) {
+    var config_data = JSON.parse(decodeURIComponent(e.response));
+    console.log('Config window returned: ' + JSON.stringify(config_data));
+
+    var dict = {
+      'KEY_USERNAME': config_data['username'],
+      'KEY_PASSWORD': config_data['password'],
+      'KEY_BG_COLOR': config_data['background_color']
+    };
+
+    Pebble.sendAppMessage(dict, function() {
+      console.log('Sent config data to Pebble: ' + JSON.stringify(dict));
+    }, function() {
+      console.log('Failed to send config data');
     });
+  });
 };
 
 Settings.reset = function() {

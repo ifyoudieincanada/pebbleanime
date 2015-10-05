@@ -19,7 +19,7 @@ var animajax = {
       type:   'json',
       async:  false,
       headers: {
-        Authorization: "Basic " + Base64.encode(Settings.option('Login') + ":" + Settings.option('password')),
+        Authorization: "Basic " + Base64.encode(Settings.option('KEY_USERNAME') + ":" + Settings.option('KEY_PASSWORD')),
       },
       data: {
         // MyAnimeList data
