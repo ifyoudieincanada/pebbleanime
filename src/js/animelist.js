@@ -14,7 +14,6 @@ var animelist = {
     var fedNumber = 0;
     var animArray = false;
     var aListObj = this;
-    var directList;
 
     // Public
 
@@ -25,8 +24,6 @@ var animelist = {
     this.setAnimeList = function(listOfAnime, fetch) {
       console.log('setting anime list');
 
-      directList = listOfAnime;
-
       var formattedAnimes = [];
       var i;
       var currentAnime;
@@ -35,6 +32,7 @@ var animelist = {
         currentAnime = {
           title: listOfAnime[i].series_title,
           icon: 'images/menu_icon.png',
+          id: listOfAnime[i].series_animedb_id,
           animeObj: new anime.Anime(listOfAnime[i], aListObj, aListObj.list, options)
         };
 
@@ -70,11 +68,21 @@ var animelist = {
     };
 
     this.store = function() { // This uses the pebble's stored data
-      if (directList) {
+      if (animArray) {
         console.log('stores data using: ' + name);
+        var i;
+        var storedList = [];
 
-        localStorage.setItem('alist_' + name, JSON.stringify(directList));
+        for (i = 0; i < animArray.length; i++) {
+          storedList.push({
+            series_title: animArray[i].title,
+            series_animedb_id: animArray[i].id
+          });
 
+          animArray[i].animeObj.store();
+        }
+
+        localStorage.setItem('alist_' + name, JSON.stringify(storedList));
         // NOTE: avoid storing directlist by storing titles, icons, ids, call store() on each Anime
 
         return;
@@ -88,9 +96,11 @@ var animelist = {
 
       var storedData = localStorage.getItem('alist_' + name);
 
-      aListObj.setAnimeList(storedData, true);
-
-      // NOTE: avoid fetching directlist by passing { series_animedb_id: id } and calling fetch() for each Anime
+      if (storedData) {
+        aListObj.setAnimeList(JSON.parse(storedData), true);
+        return;
+      }
+      // Error out
 
     };
 
@@ -99,12 +109,11 @@ var animelist = {
       fedNumber = 0;
     };
 
-    this.addAnime = function(animeObjList) {
+    this.addAnime = function(animeObj) {
       console.log('addAnime called');
 
       if (animArray) {
-        animArray.push(animeObjList[0]);
-        directList.push(animeObjList[1]);
+        animArray.push(animeObj);
       }
       // Error out
     };
@@ -112,19 +121,11 @@ var animelist = {
     this.removeAnime = function(animeDatabaseID) {
       console.log('removeAnime called');
       var i;
-      var dListAnime;
 
       if (animArray) {
-        for (i = 0; i < directList.length; i++) {
-          if (directList[i].series_animedb_id === animeDatabaseID) {
-            dListAnime = directList.splice(i, 1);
-            break;
-          }
-        }
-
         for (i = 0; i < animArray.length; i++) {
           if (animArray[i].anime_id === animeDatabaseID) {
-            return [animArray.splice(i, 1), dListAnime];
+            return animArray.splice(i, 1);
           }
         }
       }

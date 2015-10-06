@@ -39,22 +39,20 @@ var anime = {
 
     var retryCount = 0;
 
-    this.fetch = function() {
+    this.fetch = function() { // Find way to not use localStorage
       console.log('fill ajax_payload and other variables with data');
 
       var f = localStorage.getItem('anime_' + id);
 
       if (f) {
-        var pf = JSON.parse(f);
-
-        ajax_payload = pf;
+        ajax_payload = JSON.parse(f);
 
         return;
       }
       // Error out
     };
 
-    this.store = function() {
+    this.store = function() { // Find way to not use localStorage
       console.log('save ajax_payload and other variables to pebble');
 
       localStorage.setItem('anime_' + id, JSON.stringify(ajax_payload));
