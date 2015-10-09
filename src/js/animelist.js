@@ -54,7 +54,7 @@ var animelist = {
         var retList = [];
         var i;
 
-        for (i = 0; i < 10; i++) {
+        for (i = 0; i < 10; i += 1) {
           if (fedNumber + i < animArray.length) {
             retList.push(animArray[fedNumber + i]);
           }
@@ -73,17 +73,19 @@ var animelist = {
         var i;
         var storedList = [];
 
-        for (i = 0; i < animArray.length; i++) {
+        for (i = 0; i < animArray.length; i += 1) {
           storedList.push({
             series_title: animArray[i].title,
             series_animedb_id: animArray[i].id
           });
 
           animArray[i].animeObj.store();
-        }
 
-        localStorage.setItem('alist_' + name, JSON.stringify(storedList));
-        // NOTE: avoid storing directlist by storing titles, icons, ids, call store() on each Anime
+          if (i % 100 === 0 && i !== 0) {
+            localStorage.setItem('alist_' + name + '_' + i/100, JSON.stringify(storedList));
+            storedList = [];
+          }
+        }
 
         return;
       }
@@ -93,8 +95,18 @@ var animelist = {
     this.fetch = function() { // This uses the pebble's stored data
       // Fills animArray with stored data, must handle no-data event
       console.log('fetches data using: ' + name);
+      var i;
+      var storedData = [];
+      var currentData;
 
-      var storedData = localStorage.getItem('alist_' + name);
+      for (i = 0; i < 50; i += 1) {
+        currentData = localStorage.getItem('alist_' + name + '_' + i);
+        if (currentData) {
+          storedData += currentData;
+        } else {
+          break;
+        }
+      }
 
       if (storedData) {
         aListObj.setAnimeList(JSON.parse(storedData), true);
